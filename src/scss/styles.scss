@@ -1,0 +1,128 @@
+@use "./mixins.scss";
+@use "./palette.scss";
+
+.game {
+    // &__sea {
+    //     // styles to add later
+    // }
+
+    &__background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+    }
+
+    // &__waves {
+    //     // styles maybe add later
+    // }
+
+    &__content {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 95%;
+        max-width: 600px;
+        text-align: center;
+        z-index: 10;
+
+        & .game__title {
+            font-size: 1.6rem;
+            color: palette.$tiel;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px palette.$text-shadow-dark;
+
+            &-word {
+                letter-spacing: 0.2em;
+                color: palette.$white;
+                text-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+            }
+
+            &-gap {
+                display: inline-block;
+                width: 17px;
+            }
+        }
+
+        & .game__display {
+            background-color: palette.$semi-transparent-dark-overlay;
+            color: palette.$white;
+            border-radius: 10px;
+            padding: 8px 10px;
+            box-shadow: 0 4px 10px palette.$box-shadow-dark;
+            backdrop-filter: blur(4px);
+            display: grid;
+            grid-row-gap: 4px;
+            font-size: 0.85rem;
+
+            & .game__bin,
+            & .game__lives {
+                margin-bottom: 4px;
+                color: palette.$white-sand;
+                font-weight: bold;
+            }
+
+            & .game__legend {
+                background-color: palette.$kelly-green;
+                color: palette.$white-sand;
+                padding: 2px 4px;
+                border-radius: 4px;
+                font-size: 0.8rem;
+                box-shadow: inset 0 0 5px palette.$box-shadow-dark;
+
+                // to add a div later and give it a font-size and maybe colour
+                //for the emojis which will be generated dynamically in main.ts
+            }
+
+            & .game__message {
+                color: palette.$sandy-brown;
+                font-weight: bold;
+                font-size: 1.2rem;
+            }
+        }
+
+        & .game__start-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: palette.$kelly-green;
+            color: palette.$white;
+            font-weight: bold;
+            font-size: 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px palette.$box-shadow-dark;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: palette.$aquamarine;
+            }
+
+            &:disabled {
+                background-color: palette.$navy-blue;
+                cursor: not-allowed;
+                opacity: 0.6;
+            }
+        }
+
+        // & .game__emoji-area {
+        //     // styles for dynamic emojis maybe add later
+        // }
+    }
+
+    &__bin-icon {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        font-size: 8rem;
+        color: palette.$deep-sky-blue;
+        text-shadow: 0 0 10px palette.$deep-sky-blue,
+            0 0 20px palette.$aquamarine;
+    }
+}
