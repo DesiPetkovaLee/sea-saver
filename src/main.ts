@@ -27,7 +27,7 @@ const trashItems: TrashItem[] = [
     { emoji: "🧋", points: 18 },
 ];
 
-// let score = 0;
+let score = 0;
 // let lives = 3;
 // const winScore = 500;
 // const missedTrash: string[] = [];
@@ -44,11 +44,12 @@ const generateLegend = (): void => {
     legendEl.innerHTML = `<div class="legend__item">Legend: 1 emoji = 10 points</div>`; // add the legend
 };
 
-if (startBtn) {
-    startBtn.addEventListener("click", () => {
-        generateLegend();
-    });
-}
+// if (startBtn) {
+//     startBtn.addEventListener("click", () => {
+//         generateLegend();
+//         trashInTheSea(1500);
+//     });
+// }
 
 // GENERATE TRASH IN RANDOM SPOT
 
@@ -77,5 +78,16 @@ const trashInTheSea = (timeBeforeLapse: number) => {
         newTrash.remove();
         trashInTheSea(timeBeforeLapse);
     }, timeBeforeLapse);
+
+    // HANDLE CLICKING TRASH
 };
-trashInTheSea(2000);
+
+// start game - executing all functions on btn click
+const startGame = (): void => {
+    generateLegend();
+    trashInTheSea(1500);
+};
+
+if (startBtn) {
+    startBtn.addEventListener("click", startGame);
+}

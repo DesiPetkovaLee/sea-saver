@@ -121,5 +121,17 @@
         color: palette.$deep-sky-blue;
         text-shadow: 0 0 10px palette.$deep-sky-blue,
             0 0 20px palette.$aquamarine;
+
+        .bin-score {
+            position: absolute;
+            top: 65%; // lower down, so it sits inside the bin
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: palette.$white;
+            font-size: 4rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px palette.$box-shadow-dark;
+            pointer-events: none;
+        }
     }
 }
