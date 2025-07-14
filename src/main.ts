@@ -1,6 +1,7 @@
 import "./scss/styles.scss";
 
-// const sea = document.querySelector<HTMLDivElement>(".game__sea");
+const seaEl = document.querySelector<HTMLDivElement>(".game__sea");
+
 // const scoreEl = document.querySelector<HTMLSpanElement>(".game__score");
 // const livesEl = document.querySelector<HTMLDivElement>(".game__lives");
 const legendEl = document.querySelector<HTMLDivElement>(".game__legend");
@@ -31,11 +32,13 @@ const trashItems: TrashItem[] = [
 // const winScore = 500;
 // const missedTrash: string[] = [];
 
-const generateLegend = (): void => {
-    if (!legendEl) {
-        throw new Error("Legend has not been found");
-    }
+if (!legendEl || !startBtn || !seaEl) {
+    throw new Error("One or more required elements were not found");
+}
 
+// LEGEND DISPLAYS AFTER THE USER CLICKS ON START BUTTON
+
+const generateLegend = (): void => {
     legendEl.style.display = "block"; // display the legend
     legendEl.innerHTML = ""; // clear the old legend
     legendEl.innerHTML = `<div class="legend__item">Legend: 1 emoji = 10 points</div>`; // add the legend
@@ -44,30 +47,35 @@ const generateLegend = (): void => {
 if (startBtn) {
     startBtn.addEventListener("click", () => {
         generateLegend();
-        console.log("legend generated");
     });
 }
 
-///2.
-// --generate trash in random spot--
-//generate the trash legend
-//pick a random emoji --->  math.random
-//generate a trash emoji in a random spot
-//when you click on the emoji, remove it, increase the score, create new
-//random emoji, clear the current timeout and add the new emoji
-//
+// GENERATE TRASH IN RANDOM SPOT
 
-///3.
-// increase the player score
-//check if the score is >= than the winning score, if yes - you win!
+const trashInTheSea = (timeBeforeLapse: number) => {
+    // pick a random trash from the array
+    const randomIndex = Math.floor(Math.random() * trashItems.length);
+    const randomTrash = trashItems[randomIndex];
 
-//4 missing piece of trash
-// reduce the number of player lives by 1 (i.e. from 3 to 2 )
-// update the text to show the new number of lives
-// maybe? reduce the hearts left for each time the user loses (if lives=2, you get 2)
-// end the game if lives reach 0
+    // creating a new div for the trash
+    const newTrash = document.createElement("div");
+    newTrash.textContent = randomTrash.emoji;
 
-///5. end of game
-// set the msg text depending on the result
-//if the result is win, display - you saved the sea, otherwise -game over
-//
+    // Styling it
+    newTrash.style.position = "absolute";
+    const top = Math.random() * 80;
+    const left = Math.random() * 90;
+    newTrash.style.top = `${top}%`;
+    newTrash.style.left = `${left}%`;
+    newTrash.style.fontSize = "3rem";
+    newTrash.style.cursor = "grab";
+
+    // Adding it to the sea
+    seaEl.appendChild(newTrash);
+
+    setTimeout(() => {
+        newTrash.remove();
+        trashInTheSea(timeBeforeLapse);
+    }, timeBeforeLapse);
+};
+trashInTheSea(2000);

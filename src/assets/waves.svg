@@ -1,0 +1,13 @@
+<svg width="300" height="80" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,40
+        Q15,-12 30,40
+        T60,40
+        T90,40
+        T120,40
+        T150,40
+        T180,40
+        T210,40
+        T240,40
+        T270,40
+        T300,40" stroke="#FFD600" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

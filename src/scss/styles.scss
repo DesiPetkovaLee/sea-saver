@@ -68,6 +68,7 @@
             }
 
             & .game__legend {
+                display: none;
                 background-color: palette.$kelly-green;
                 color: palette.$white-sand;
                 padding: 2px 4px;
@@ -110,10 +111,6 @@
                 opacity: 0.6;
             }
         }
-
-        // & .game__emoji-area {
-        //     // styles for dynamic emojis maybe add later
-        // }
     }
 
     &__bin-icon {
