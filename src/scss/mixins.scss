@@ -1,0 +1,22 @@
+@use "./devices.scss";
+
+$xs-plus-one: devices.$xs + 1;
+$sm-plus-one: devices.$sm + 1;
+
+@mixin phone {
+    @media only screen and (max-width: devices.$xs) {
+        @content;
+    }
+}
+
+@mixin tablets {
+    @media only screen and (min-width: $xs-plus-one) and (max-width: devices.$sm) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media only screen and (min-width: $sm-plus-one) {
+        @content;
+    }
+}
