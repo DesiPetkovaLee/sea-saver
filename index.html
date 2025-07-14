@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sea Saver</title>
+    </head>
+
+    <body>
+        <main class="game">
+            <div class="game__sea">
+                <img
+                    src="/src/assets/underwater.png"
+                    alt="Sea/Ocean background"
+                    class="game__background"
+                />
+                <!-- possible waves later -->
+                <div class="game__waves"></div>
+            </div>
+
+            <div class="game__content">
+                <h1 class="game__title">
+                    🌊 <span class="game__title-word">S E A</span>
+                    <span class="game__title-gap"></span>
+                    <span class="game__title-word">S A V E R</span> 🌊
+                </h1>
+
+                <section class="game__display">
+                    <div class="game__bin">
+                        SCORE :
+                        <span class="game__score">0</span>
+                    </div>
+                    <div class="game__lives">LIVES: ❤️ ❤️ ❤️</div>
+                    <div class="game__legend">
+                        with TS --- LEGEND- want to show the emoji's and the
+                        points they are worth
+                    </div>
+                    <div class="game__message">
+                        with TS --- YOU WIN / YOU LOSE
+                    </div>
+                </section>
+
+                <!-- Start/Restart button  -->
+                <button class="game__start-button">Start Game</button>
+                <div class="game__emoji-area">
+                    <!-- emojis will appear here dynamically TS -->
+                </div>
+            </div>
+            <!-- game__bin-icon --- bonus info or effects in TS.-->
+            <div class="game__bin-icon">🗑️</div>
+
+            <script type="module" src="/src/main.ts"></script>
+        </main>
+    </body>
+</html>
