@@ -2,7 +2,8 @@ import "./scss/styles.scss";
 
 const seaEl = document.querySelector<HTMLDivElement>(".game__sea");
 
-// const scoreEl = document.querySelector<HTMLSpanElement>(".game__score");
+const scoreEl = document.querySelector<HTMLSpanElement>(".game__score");
+const binScoreEl = document.querySelector<HTMLSpanElement>(".bin-score");
 // const livesEl = document.querySelector<HTMLDivElement>(".game__lives");
 const legendEl = document.querySelector<HTMLDivElement>(".game__legend");
 // const messageEl = document.querySelector<HTMLDivElement>(".game__message");
@@ -10,7 +11,7 @@ const startBtn = document.querySelector<HTMLButtonElement>(
     ".game__start-button"
 );
 
-// defining trashitems and state
+// DEFINING TRASH ITEMS AND STATE
 type TrashItem = {
     emoji: string;
     points: number;
@@ -32,6 +33,16 @@ let score = 0;
 // const winScore = 500;
 // const missedTrash: string[] = [];
 
+// UPDATING THE SCORE TO MATCH THE CURRENT SCORE VALUE
+const updateScore = (): void => {
+    if (scoreEl) {
+        scoreEl.textContent = score.toString();
+    }
+    if (binScoreEl) {
+        binScoreEl.textContent = score.toString();
+    }
+};
+
 if (!legendEl || !startBtn || !seaEl) {
     throw new Error("One or more required elements were not found");
 }
@@ -43,13 +54,6 @@ const generateLegend = (): void => {
     legendEl.innerHTML = ""; // clear the old legend
     legendEl.innerHTML = `<div class="legend__item">Legend: 1 emoji = 10 points</div>`; // add the legend
 };
-
-// if (startBtn) {
-//     startBtn.addEventListener("click", () => {
-//         generateLegend();
-//         trashInTheSea(1500);
-//     });
-// }
 
 // GENERATE TRASH IN RANDOM SPOT
 
@@ -74,18 +78,27 @@ const trashInTheSea = (timeBeforeLapse: number) => {
     // Adding it to the sea
     seaEl.appendChild(newTrash);
 
-    setTimeout(() => {
+    const trashTimeout = setTimeout(() => {
         newTrash.remove();
         trashInTheSea(timeBeforeLapse);
     }, timeBeforeLapse);
 
     // HANDLE CLICKING TRASH
+    newTrash.addEventListener("click", () => {
+        console.log("clicked trash");
+
+        clearTimeout(trashTimeout);
+        newTrash.remove();
+        score += randomTrash.points;
+        updateScore();
+        trashInTheSea(timeBeforeLapse);
+    });
 };
 
 // start game - executing all functions on btn click
 const startGame = (): void => {
     generateLegend();
-    trashInTheSea(1500);
+    trashInTheSea(1200);
 };
 
 if (startBtn) {
