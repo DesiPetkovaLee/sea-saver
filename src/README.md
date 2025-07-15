@@ -82,8 +82,6 @@ Here’s what I’ve already built vs. what’s still pending.
 -   [ ] When a player clicks trash, remove it, add points to the score, and show new trash right away.
 -   [ ] Update the score display whenever the score changes.
 -   [ ] Make trash disappear automatically if it’s not clicked quickly enough.
--   [ ] If trash disappears on its own, take away one life from the player.
--   [ ] Show fewer hearts each time the player loses a life.
 -   [ ] Check if the player has enough points to win the game.
 -   [ ] Check if the player has no lives left and loses the game.
 -   [ ] Show a message when the game is won or lost.
