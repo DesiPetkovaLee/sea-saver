@@ -8,12 +8,13 @@ const messageEl = document.querySelector<HTMLDivElement>(".game__message");
 const startBtn = document.querySelector<HTMLButtonElement>(
     ".game__start-button"
 );
+const trashAreaEl = document.querySelector<HTMLDivElement>(".game__trash-area");
 
 if (!legendEl || !startBtn || !seaEl || !scoreEl || !binScoreEl || !messageEl) {
     throw new Error("One or more elements were not found");
 }
 
-// GAME STATE
+// GAME STATE AND DEFINING TRASH ITEMS
 
 type TrashItem = {
     emoji: string;
@@ -38,20 +39,20 @@ const winScore = 300;
 let missedCount = 0;
 const maxMisses = 5;
 
-// Update score display
+// Updating score display to match the current value
 const updateScore = (): void => {
     scoreEl.textContent = score.toString();
     binScoreEl.textContent = score.toString();
 };
 
-// Generate legend
+// Generating legend
 const generateLegend = (): void => {
     legendEl.style.display = "block";
     legendEl.innerHTML = "";
     legendEl.innerHTML = `<div class="legend__item">1 emoji = 10 points</div>`;
 };
 
-// Generate random trash
+// Generating random trash
 const trashInTheSea = (timeBeforeLapse: number) => {
     if (!gameRunning) return;
 
@@ -61,7 +62,7 @@ const trashInTheSea = (timeBeforeLapse: number) => {
     const newTrash = document.createElement("div");
     newTrash.classList.add("trash");
     newTrash.textContent = randomTrash.emoji;
-
+    //styling it
     newTrash.style.position = "absolute";
     const top = Math.random() * 80;
     const left = Math.random() * 90;
@@ -69,8 +70,8 @@ const trashInTheSea = (timeBeforeLapse: number) => {
     newTrash.style.left = `${left}%`;
     newTrash.style.fontSize = "3rem";
     newTrash.style.cursor = "grab";
-
-    seaEl.appendChild(newTrash);
+    // adding it to the sea, appending to the box
+    trashAreaEl?.appendChild(newTrash);
 
     const trashTimeout = window.setTimeout(() => {
         newTrash.remove();
@@ -80,12 +81,14 @@ const trashInTheSea = (timeBeforeLapse: number) => {
             endGame(false);
             return;
         }
-
-        trashInTheSea(timeBeforeLapse); // starts the next trash item if the game isnt over
+        // If the game isn't over, generate another piece of trash.
+        trashInTheSea(timeBeforeLapse);
     }, timeBeforeLapse);
 
+    //storing each timeout’s id's
     activeTimeouts.push(trashTimeout);
 
+    // handle clicking trash
     newTrash.addEventListener("click", () => {
         clearTimeout(trashTimeout);
         newTrash.remove();
@@ -145,13 +148,17 @@ const startGame = (): void => {
 
         startBtn.textContent = "Stop";
 
-        // Reset state
+        // Reset game state completely
         score = 0;
+        missedCount = 0;
         updateScore();
-
+        // Clear any game over or win messages
         legendEl.style.display = "none";
         messageEl.style.display = "none";
         messageEl.textContent = "";
+
+        // Remove any leftover trash
+        document.querySelectorAll(".trash").forEach((el) => el.remove());
 
         generateLegend();
         trashInTheSea(1350);

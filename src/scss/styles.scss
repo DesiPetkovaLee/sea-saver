@@ -1,5 +1,6 @@
 @use "./mixins.scss";
 @use "./palette.scss";
+@use "./devices.scss";
 
 .game {
     // &__sea {
@@ -111,6 +112,15 @@
                 opacity: 0.6;
             }
         }
+        // display trash in the middle
+        & .game__trash-area {
+            position: relative;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 800px;
+            height: 200px;
+            overflow: hidden;
+        }
     }
 
     &__bin-icon {
@@ -132,6 +142,40 @@
             font-weight: bold;
             text-shadow: 1px 1px 2px palette.$box-shadow-dark;
             pointer-events: none;
+        }
+    }
+}
+
+@include mixins.tablets {
+    .game {
+        &__content {
+            max-width: 800px;
+
+            & .game__title {
+                font-size: 2rem;
+            }
+
+            & .game__display {
+                font-size: 1.5rem;
+            }
+
+            & .game__start-button {
+                font-size: 1.2rem;
+                padding: 12px 24px;
+            }
+
+            & .game__trash-area {
+                height: 300px;
+                max-width: 600px;
+            }
+        }
+
+        &__bin-icon {
+            font-size: 10rem;
+
+            .bin-score {
+                font-size: 5rem;
+            }
         }
     }
 }
