@@ -13,9 +13,15 @@
         z-index: 0;
     }
 
-    // &__waves {
-    //     // styles maybe add later
-    // }
+    &__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none; // it doesn't block mouse clicks from reaching the trash emojis underneath it
+        background-color: transparent;
+    }
 
     &__content {
         position: absolute;
@@ -146,6 +152,16 @@
     }
 }
 
+.game__fireworks {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+}
+
 @include mixins.tablets {
     .game {
         &__content {
@@ -202,6 +218,16 @@
 
         &__seaweed > * {
             margin: 0;
+            display: inline-block;
+            animation: sway 2s ease-in-out infinite;
+        }
+
+        &__seaweed > *:nth-child(odd) {
+            animation-delay: 0.3s;
+        }
+
+        &__seaweed > *:nth-child(even) {
+            animation-delay: 0.6s;
         }
 
         &__bin-icon {
@@ -245,5 +271,17 @@
                 font-size: 5rem;
             }
         }
+    }
+}
+
+@keyframes sway {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px) rotate(-3deg);
+    }
+    100% {
+        transform: translateY(0);
     }
 }
