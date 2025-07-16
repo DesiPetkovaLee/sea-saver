@@ -120,7 +120,7 @@ const stopGame = (): void => {
     startBtn.textContent = "Start Game";
 };
 
-// End game on win
+// End game on win or lose
 const endGame = (didWin: boolean): void => {
     gameRunning = false;
 
@@ -131,9 +131,12 @@ const endGame = (didWin: boolean): void => {
 
     legendEl.style.display = "none";
 
-    messageEl.textContent = didWin
-        ? "🎉 YOU WIN! 🎉"
-        : "💥 GAME OVER! You missed too many times 💥";
+    if (didWin) {
+        messageEl.textContent = "🎉 YOU WIN! 🎉";
+    } else {
+        messageEl.textContent = "💥 GAME OVER! You missed too many times 💥";
+    }
+
     messageEl.style.display = "block";
 
     startBtn.textContent = "Start Game";
