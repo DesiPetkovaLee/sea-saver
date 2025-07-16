@@ -71,11 +71,14 @@
             & .game__legend {
                 display: none;
                 background-color: palette.$kelly-green;
-                color: palette.$white-sand;
-                padding: 2px 4px;
-                border-radius: 4px;
-                font-size: 0.8rem;
-                box-shadow: inset 0 0 5px palette.$box-shadow-dark;
+                color: palette.$white;
+                padding: 3px 6px;
+                border-radius: 8px;
+                font-size: 1rem;
+                font-weight: bold;
+                box-shadow: inset 2 2 5px palette.$box-shadow-dark;
+                text-align: center;
+                letter-spacing: 0.5px;
 
                 // to add a div later and give it a font-size and maybe colour
                 //for the emojis which will be generated dynamically in main.ts
@@ -104,6 +107,7 @@
 
             &:hover {
                 background-color: palette.$aquamarine;
+                color: palette.$navy-blue;
             }
 
             &:disabled {

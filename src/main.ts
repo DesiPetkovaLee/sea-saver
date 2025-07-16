@@ -14,7 +14,7 @@ if (!legendEl || !startBtn || !seaEl || !scoreEl || !binScoreEl || !messageEl) {
     throw new Error("One or more elements were not found");
 }
 
-// GAME STATE AND DEFINING TRASH ITEMS
+// game state and defining trash items
 
 type TrashItem = {
     emoji: string;
