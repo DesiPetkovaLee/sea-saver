@@ -224,7 +224,7 @@ const startGame = (): void => {
         document.querySelectorAll(".trash").forEach((el) => el.remove());
 
         generateLegend();
-        trashInTheSea(1350);
+        trashInTheSea(1300);
     }
 };
 
