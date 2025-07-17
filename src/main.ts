@@ -230,6 +230,7 @@ const startGame = (): void => {
 
 startBtn.addEventListener("click", startGame);
 
-//  npm install fireworks-js !!
+// Credit to :
+// npm install fireworks-js !!
 // https://github.com/crashmax-dev/fireworks-js/blob/master/README.md#fireworks-js
 // https://fireworks.js.org/
