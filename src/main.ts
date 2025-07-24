@@ -1,5 +1,8 @@
 import "./scss/styles.scss";
 import { Fireworks } from "fireworks-js";
+import { brownLevels } from "./data/brownLevels";
+import { trashItems } from "./data/trashItems";
+import { waveSound, fireworksSound, loseSound } from "./audio/sounds";
 
 const seaEl = document.querySelector<HTMLDivElement>(".game__sea");
 const scoreEl = document.querySelector<HTMLSpanElement>(".game__score");
@@ -27,24 +30,6 @@ if (
     throw new Error("One or more elements were not found");
 }
 
-// game state and defining trash items
-
-type TrashItem = {
-    emoji: string;
-    points: number;
-};
-
-const trashItems: TrashItem[] = [
-    { emoji: "🥤", points: 10 },
-    { emoji: "🦴", points: 6 },
-    { emoji: "🍕", points: 7 },
-    { emoji: "🧃", points: 20 },
-    { emoji: "👕", points: 11 },
-    { emoji: "🧤", points: 14 },
-    { emoji: "🥫", points: 22 },
-    { emoji: "🧋", points: 18 },
-];
-
 let score = 0;
 let gameRunning = false;
 let activeTimeouts: number[] = [];
@@ -52,22 +37,14 @@ const winScore = 300;
 let missedCount = 0;
 const maxMisses = 5;
 
-const brownLevels = [
-    "rgba(0,0,0,0)", // 0 misses → transparent
-    "rgba(210,180,140,0.2)", // tan
-    "rgba(160,82,45,0.3)", // sienna
-    "rgba(139,69,19,0.4)", // saddle brown
-    "rgba(92,64,51,0.5)", // dark brown
-    "rgba(62,39,35,0.7)", // very dark brown
-];
-
+// Update the overlay brownness
 const updateSeaBrownness = (): void => {
-    let color = "rgba(0,0,0,0)";
-
+    let color: string;
     if (missedCount > 0 && missedCount <= maxMisses) {
         color = brownLevels[missedCount];
+    } else {
+        color = "rgba(0,0,0,0)";
     }
-
     overlayEl.style.backgroundColor = color;
 };
 
@@ -80,8 +57,7 @@ const updateScore = (): void => {
 // Generating legend
 const generateLegend = (): void => {
     legendEl.style.display = "block";
-    legendEl.innerHTML = "";
-    legendEl.innerHTML = `<div class="legend__item">1 emoji = 10 points</div>`;
+    legendEl.innerHTML = `<div class="legend__item">1 trash -> 10 points / To Win -> 300 points </div>`;
 };
 
 // Generating random trash
@@ -90,7 +66,6 @@ const trashInTheSea = (timeBeforeLapse: number) => {
 
     const randomIndex = Math.floor(Math.random() * trashItems.length);
     const randomTrash = trashItems[randomIndex];
-
     const newTrash = document.createElement("div");
     newTrash.classList.add("trash");
     newTrash.textContent = randomTrash.emoji;
@@ -102,15 +77,17 @@ const trashInTheSea = (timeBeforeLapse: number) => {
     newTrash.style.left = `${left}%`;
     newTrash.style.fontSize = "3rem";
     newTrash.style.cursor = "grab";
+    // accessibility attributes
+    newTrash.setAttribute("tabindex", "0"); // makes it keyboard-focusable
+    newTrash.setAttribute("role", "button"); // tells screen readers it's clickable
+    newTrash.setAttribute("aria-label", `Trash item: ${randomTrash.emoji}`);
     // adding it to the sea, appending to the box
     trashAreaEl?.appendChild(newTrash);
-
     const trashTimeout = window.setTimeout(() => {
         newTrash.remove();
         // increment missed count when trash dissapears
         missedCount++;
         updateSeaBrownness(); // calling this to update the brown colour
-
         if (missedCount > maxMisses) {
             endGame(false);
             return;
@@ -118,7 +95,6 @@ const trashInTheSea = (timeBeforeLapse: number) => {
         // If the game isn't over, generate another piece of trash.
         trashInTheSea(timeBeforeLapse);
     }, timeBeforeLapse);
-
     //storing each timeout’s id's
     activeTimeouts.push(trashTimeout);
 
@@ -126,48 +102,45 @@ const trashInTheSea = (timeBeforeLapse: number) => {
     newTrash.addEventListener("click", () => {
         clearTimeout(trashTimeout);
         newTrash.remove();
-
         score += randomTrash.points;
         updateScore();
-
         if (score >= winScore) {
             endGame(true);
             return;
         }
-
         trashInTheSea(timeBeforeLapse);
+    });
+
+    // handle keyboard "click"
+    newTrash.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            newTrash.click();
+        }
     });
 };
 
 // Stop game (manual stop)
 const stopGame = (): void => {
     gameRunning = false;
-
     activeTimeouts.forEach((id) => clearTimeout(id));
     activeTimeouts = [];
-
     // Remove only trash elements, keep background image
     document.querySelectorAll(".trash").forEach((el) => el.remove());
-
     legendEl.style.display = "none";
-
     startBtn.textContent = "Start Game";
 };
 
 // End game on win or lose
 const endGame = (didWin: boolean): void => {
     gameRunning = false;
-
     activeTimeouts.forEach((id) => clearTimeout(id));
     activeTimeouts = [];
-
     document.querySelectorAll(".trash").forEach((el) => el.remove());
-
     legendEl.style.display = "none";
 
     if (didWin) {
         messageEl.textContent = "🎉 YOU WIN! 🎉";
-
         const fireworks = new Fireworks(fireworksContainer, {
             hue: { min: 0, max: 360 },
             delay: { min: 15, max: 30 },
@@ -176,11 +149,15 @@ const endGame = (didWin: boolean): void => {
             brightness: { min: 50, max: 80 },
             autoresize: true,
         });
-
         fireworks.start();
-
-        // stop fireworks after 3 secs
+        //Start sound on fireworks
+        fireworksSound.currentTime = 0;
+        fireworksSound.play();
+        // Stop fireworks after 3 secs
         setTimeout(() => {
+            //Pause the sound just before the fireworks stop
+            fireworksSound.pause();
+            fireworksSound.currentTime = 0;
             fireworks.stop();
             fireworksContainer.innerHTML = "";
             overlayEl.style.backgroundColor = "rgba(0,0,0,0)";
@@ -188,17 +165,19 @@ const endGame = (didWin: boolean): void => {
     } else {
         // Set overlay to darkest brown
         overlayEl.style.backgroundColor = brownLevels[5];
-
+        // Play lose sound
+        loseSound.currentTime = 0;
+        loseSound.play();
         messageEl.textContent = "💥 GAME OVER! You missed too many times 💥";
-
         // After 3 secs., reset overlay
         setTimeout(() => {
             overlayEl.style.backgroundColor = "rgba(0,0,0,0)";
         }, 3000);
     }
-
+    // Stop wave sound when game ends (win or lose)
+    waveSound.pause();
+    waveSound.currentTime = 0;
     messageEl.style.display = "block";
-
     startBtn.textContent = "Start Game";
 };
 
@@ -206,11 +185,12 @@ const endGame = (didWin: boolean): void => {
 const startGame = (): void => {
     if (gameRunning) {
         stopGame();
+        // Stop wave sound when game is stopped
+        waveSound.pause();
+        waveSound.currentTime = 0;
     } else {
         gameRunning = true;
-
         startBtn.textContent = "Stop";
-
         // Reset game state completely
         score = 0;
         missedCount = 0;
@@ -219,12 +199,13 @@ const startGame = (): void => {
         legendEl.style.display = "none";
         messageEl.style.display = "none";
         messageEl.textContent = "";
-
         // Remove any leftover trash
         document.querySelectorAll(".trash").forEach((el) => el.remove());
-
         generateLegend();
         trashInTheSea(1300);
+        // Play wave sound when game starts
+        waveSound.currentTime = 0;
+        waveSound.play();
     }
 };
 

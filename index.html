@@ -6,7 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Sea Saver</title>
     </head>
-
     <body>
         <main class="game">
             <!-- emojis will appear here dynamically TS -->
@@ -20,25 +19,31 @@
                 <!-- possible waves later -->
                 <div class="game__waves"></div>
             </div>
-
             <div class="game__content">
                 <h1 class="game__title">
                     🌊 <span class="game__title-word">S E A</span>
                     <span class="game__title-gap"></span>
                     <span class="game__title-word">S A V E R</span> 🌊
                 </h1>
-
                 <section class="game__display">
                     <div class="game__bin">
                         S C O R E :
                         <span class="game__score">0</span>
                     </div>
                     <div class="game__legend"></div>
-                    <div class="game__message"></div>
+                    <div
+                        class="game__message"
+                        role="status"
+                        aria-live="polite"
+                    ></div>
                 </section>
-
                 <!-- Start/Stop button  -->
-                <button class="game__start-button">Start Game</button>
+                <button
+                    class="game__start-button"
+                    area-label="Start or stop the game"
+                >
+                    Start Game
+                </button>
                 <!-- trash box area -->
                 <div class="game__trash-area"></div>
             </div>
@@ -63,7 +68,6 @@
                 <span>🪸</span>
             </div>
             <div class="game__fireworks"></div>
-
             <script type="module" src="/src/main.ts"></script>
         </main>
     </body>
